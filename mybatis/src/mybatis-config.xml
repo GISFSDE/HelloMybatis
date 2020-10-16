@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!--<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>< 配置 >
+    <properties />< 属性 >
+    <settings /><设置 >
+    <typeAliases />< 类型命名>
+    <typeHandlers />< 类型处理器 >
+    <objectFactory /><对象工厂 >
+    <plugins /><插件>
+    <environments><配置环境 >
+        <environment><环境变量 >
+             <transactionManager />< 事务管理器 >
+             <dataSource /><数据源 >
+        </environment>
+    </environments>
+    <databaseIdProvider />< 数据库厂商标识 >
+    <mappers />< 映射器 >
+</configuration>-->
+<!--配置顺序不能颠倒-->
+
+
+<configuration>
+
+    <!-- 别名 ，扫描这个包里面的类，将其第一个字母变为小写作为其别名-->
+    <typeAliases>
+        <package name="pojo"/>
+    </typeAliases>
+    <!-- 数据库环境 -->
+    <environments default="development">
+        <environment id="development">
+            <!-- 使用JDBC的事务管理 -->
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <!-- MySQL数据库驱动 -->
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <!-- 连接数据库的URL -->
+                <property name="url" value="jdbc:mysql://localhost:3306/mybatis?characterEncoding=UTF-8"/>
+                <property name="username" value="root"/>
+                <property name="password" value="724111"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <!-- 映射文件 -->
+    <mappers>
+
+        <mapper resource="pojo/Student.xml"/>
+        <mapper resource="pojo/class.xml"/>
+        <!--动态代理-->
+        <mapper resource="pojo/StudentMapper.xml"/>
+<!--        注解方式  注意： 这次映射的并不是文件（使用 resource 属性），而是类（使用 class 属性）
+<mapper class="接口全类名（pojo.StudentMapper）"/>-->
+
+    </mappers>
+
+</configuration>

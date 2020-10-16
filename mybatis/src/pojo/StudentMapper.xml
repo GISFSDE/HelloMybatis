@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace接口全类名，注解接口可去掉xml-->
+<mapper namespace="pojo.StudentMapper">
+    <!-- 查询学生 -->
+    <select id="findStudentById" parameterType="_int" resultType="pojo.Student">
+        SELECT * FROM student WHERE studentID = #{id}
+    </select>
+    <!-- 增加用户 -->
+    <insert id="insertStudent" parameterType="pojo.Student">
+        INSERT INTO student(studentID, name) VALUES(#{id}, #{name})
+    </insert>
+    <!-- 删除用户 -->
+    <delete id="deleteStudent" parameterType="_int">
+        DELETE FROM student WHERE studentID = #{id}
+    </delete>
+    <!-- 修改用户 -->
+    <update id="updateStudent" parameterType="pojo.Student">
+        UPDATE student SET name = #{name} WHERE student_id = #{id}
+    </update>
+</mapper>

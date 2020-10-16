@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--关于 parameterType： 就是用来在 SQL 映射文件中指定输入参数类型的，可以指定为基本数据类型（如 int、float 等）、包装数据类型（如 String、Interger 等）以及用户自己编写的 JavaBean 封装类
+关于 resultType： 在加载 SQL 配置，并绑定指定输入参数和运行 SQL 之后，会得到数据库返回的响应结果，此时使用 resultType 就是用来指定数据库返回的信息对应的 Java 的数据类型。
+由于mybatis-config.xml配置了 <typeAliases> 别名，所以在这里的 resultType 可以直接写 Student，而不用写类的全限定名 pojo.Student
+namespace 属性其实就是对 SQL 进行分类管理，实现不同业务的 SQL 隔离
+SQL Mapper（映射器）:MyBatis 新设计存在的组件，它由一个 Java 接口和 XML 文件（或注解）构成，需要给出对应的 SQL 和映射规则。它负责发送 SQL 去执行，并返回结果。-->
+<mapper namespace="pojo">
+
+    <resultMap id="Students" type="pojo.Student2">
+        <id property="id" column="student_id"/>
+        <result column="student_name" property="name"/>
+    </resultMap>
+
+    <select id="findStudentsByCourseName" parameterType="String" resultMap="Students">
+    SELECT
+      s.student_id,s.student_name
+    FROM
+      students s,student_select_course ssc,courses c
+    WHERE s.student_id = ssc.s_id
+    AND ssc.c_id = c.course_id
+    AND c.course_name = #{value}
+</select>
+
+
+    <select id="findStudentByCard" parameterType="_int" resultType="StudentAndCard">
+  SELECT
+    student1.*,
+    card.*
+  FROM
+    student1,card
+  WHERE student1.card_id = card.id AND card.number = #{value}
+</select>
+
+    <select id="findStudentByCard1" parameterType="_int" resultMap="StudentInfoMap">
+  SELECT
+    student1.*,
+    card.*
+  FROM
+    student1,card
+  WHERE student1.card_id = card.id AND card.number = #{value}
+</select>
+
+    <resultMap id="StudentInfoMap" type="pojo.StudentWithCard">
+        <!-- id 标签表示对应的主键
+             column 对应查询结果的列值
+             property 对应封装类中的属性名称
+             -->
+        <id column="id" property="id"/>
+        <result column="number" property="number"/>
+        <!-- association 表示关联的嵌套结果，
+             可以简单理解就是为封装类指定的标签
+             -->
+        <association property="student1" javaType="pojo.Student1">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+            <result column="card_id" property="card_id"/>
+        </association>
+    </resultMap>
+
+    <select id="listStudent" resultType="Student">
+        select * from  student
+    </select>
+
+    <insert id="addStudent" parameterType="Student">
+        insert into student (id, studentID, name) values (#{id},#{studentID},#{name})
+    </insert>
+
+    <delete id="deleteStudent" parameterType="Student">
+        delete from student where id = #{id}
+    </delete>
+
+    <select id="getStudent" parameterType="_int" resultType="Student">
+        select * from student where id= #{id}
+    </select>
+
+    <update id="updateStudent" parameterType="Student">
+        update student set name=#{name} where id=#{id}
+    </update>
+    <!--模糊查询  注意paramtermap与parameterType区别-->
+    <select id="findStudentByName" parameterType="java.lang.String" resultType="Student">
+    SELECT * FROM student WHERE name LIKE '%${value}%'
+</select>
+<!--======关于 “#{}” ==== 在传统的 JDBC 的编程中，占位符用 “?” 来表示，然后再加载 SQL 之前按照 “?” 的位置设置参数。
+而 “#{}” 在 MyBatis 中也代表一种占位符，该符号接受输入参数，在大括号中编写参数名称来接受对应参数。当 “#{}”
+接受简单类型时可以用 value 或者其他任意名称来获取。
+=====关于 “${}” ====== 在 SQL 配置中，有时候需要拼接 SQL 语句（例如模糊查询时），用 “#{}” 是无法达到目的的。
+在 MyBatis 中，“${}” 代表一个 “拼接符号” ，可以在原有 SQL 语句上拼接新的符合 SQL 语法的语句。
+使用 “${}” 拼接符号拼接 SQL ，会引起 SQL 注入，所以一般不建议使用 “${}”。
+=====MyBatis 使用场景==== 通过上面的入门程序，不难看出在进行 MyBatis 开发时，我们的大部分精力都放在了 SQL 映射文件上。
+MyBatis 的特点就是以 SQL 语句为核心的不完全的 ORM（关系型映射）框架。与 Hibernate 相比，Hibernate 的学习成本比较高，
+而 SQL 语句并不需要开发人员完成，只需要调用相关 API 即可。这对于开发效率是一个优势，但是缺点是没办法对 SQL 语句进行优化和修改。
+而 MyBatis 虽然需要开发人员自己配置 SQL 语句，MyBatis 来实现映射关系，但是这样的项目可以适应经常变化的项目需求。
+所以使用 MyBatis 的场景是：对 SQL 优化要求比较高，或是项目需求或业务经常变动。-->
+</mapper>

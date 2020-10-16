@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="class">
+    <resultMap id="Students" type="pojo.Student2">
+        <id column="student2_id" property="id"/>
+        <result column="name" property="name"/>
+    </resultMap>
+    <select id="listStudentByClassName" parameterType="String" resultMap="Students">
+        SELECT
+          student2.*
+        FROM
+          student2, class
+        WHERE student2.student2_id = class.student2_id AND class.name= #{value}
+    </select>
+</mapper>
