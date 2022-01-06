@@ -5,7 +5,7 @@
 <!--关于 parameterType： 就是用来在 SQL 映射文件中指定输入参数类型的，可以指定为基本数据类型（如 int、float 等）、包装数据类型（如 String、Interger 等）以及用户自己编写的 JavaBean 封装类
 关于 resultType： 在加载 SQL 配置，并绑定指定输入参数和运行 SQL 之后，会得到数据库返回的响应结果，此时使用 resultType 就是用来指定数据库返回的信息对应的 Java 的数据类型。
 由于mybatis-config.xml配置了 <typeAliases> 别名，所以在这里的 resultType 可以直接写 Student，而不用写类的全限定名 pojo.Student
-namespace 属性其实就是对 SQL 进行分类管理，实现不同业务的 SQL 隔离
+namespace 属性其实就是对 SQL 进行分类管理，实现不同业务的 SQL 隔离,其值与Dao/mapper接口得包名一致。
 SQL Mapper（映射器）:MyBatis 新设计存在的组件，它由一个 Java 接口和 XML 文件（或注解）构成，需要给出对应的 SQL 和映射规则。它负责发送 SQL 去执行，并返回结果。-->
 <mapper namespace="pojo">
 

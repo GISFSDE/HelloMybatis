@@ -25,13 +25,18 @@ public class TestMyBatis {
         //发送 SQL 给数据库。
         //控制数据库事务。
         SqlSession session = sqlSessionFactory.openSession();
-
+//现在有了一种更简洁的方式——使用和指定语句的参数和返回值相匹配的接口（比如 BlogMapper.class），现在你的代码不仅更清晰，更加类型安全，还不用担心可能出错的字符串字面值以及强制类型转换。
+//例如：
+//try (SqlSession session = sqlSessionFactory.openSession()) {
+//  BlogMapper mapper = session.getMapper(BlogMapper.class);
+//  Blog blog = mapper.selectBlog(101);
+//}
         // 找到身份证身份证号码为 1111 的学生
-        StudentAndCard student=session.selectOne("findStudentByCard",1111);
+        StudentAndCard student = session.selectOne("findStudentByCard", 1111);
         // 获得其姓名并输出
         System.out.println(student.getName());
 
-        StudentWithCard student1=session.selectOne("findStudentByCard1",1111);
+        StudentWithCard student1 = session.selectOne("findStudentByCard1", 1111);
         System.out.println(student1.getStudent1().getName());
 
 
@@ -84,7 +89,10 @@ public class TestMyBatis {
             System.out.println("ID:" + student.getId() + ",NAME:" + student.getName());
         }
     }
-/**一对多**/
+
+    /**
+     * 一对多
+     **/
     @Test
     public void test3() throws IOException {
 
@@ -102,7 +110,10 @@ public class TestMyBatis {
             System.out.println("ID:" + student.getId() + ",NAME:" + student.getName());
         }
     }
-    /**多对多**/
+
+    /**
+     * 多对多
+     **/
     @Test
     public void test4() throws IOException {
 
@@ -122,9 +133,10 @@ public class TestMyBatis {
 
 
     /**
-    Mapper 动态代理？一般创建 Web 工程时，从数据库取数据的逻辑会放置在 DAO 层（Date Access Object，数据访问对象）。
-   使用 MyBatis 开发 Web 工程时，通过 Mapper 动态代理机制，可以只编写数据交互的接口及方法定义，和对应的 Mapper 映射文件，
-   具体的交互方法实现由 MyBatis 来完成。这样大大节省了开发 DAO 层的时间。**/
+     * Mapper 动态代理？一般创建 Web 工程时，从数据库取数据的逻辑会放置在 DAO 层（Date Access Object，数据访问对象）。
+     * 使用 MyBatis 开发 Web 工程时，通过 Mapper 动态代理机制，可以只编写数据交互的接口及方法定义，和对应的 Mapper 映射文件，
+     * 具体的交互方法实现由 MyBatis 来完成。这样大大节省了开发 DAO 层的时间。
+     **/
     @Test
     public void test5() throws Exception {
 
